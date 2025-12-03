@@ -2,7 +2,7 @@
 import '@angular/compiler';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { AppComponent } from './src/app.component';
+import { AppComponent } from './src/app.component.ts';
 import { provideZonelessChangeDetection } from '@angular/core';
 
 bootstrapApplication(AppComponent, {
