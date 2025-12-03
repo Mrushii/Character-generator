@@ -1,39 +1,39 @@
-<main class="min-h-screen text-slate-200 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
-  <div class="w-full max-w-4xl mx-auto">
-    <header class="text-center mb-8">
-      <div class="inline-block bg-black/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-black/30">
-        <h1 class="font-medieval text-5xl sm:text-6xl text-amber-400">
+<main class="main-container">
+  <div class="content-wrapper">
+    <header>
+      <div class="header-box">
+        <h1 class="title font-medieval">
           Character Forge
         </h1>
-        <p class="text-slate-300 mt-2 text-lg">
+        <p class="subtitle">
           Craft your legendary hero with the power of AI.
         </p>
       </div>
     </header>
 
     @if (!generatedImage()) {
-      <div class="bg-stone-900/70 backdrop-blur-sm border border-stone-700 rounded-xl shadow-2xl p-6 sm:p-8 transition-opacity duration-500">
+      <div class="form-container">
         @if (isLoading()) {
-          <div class="flex flex-col items-center justify-center text-center p-8 h-96">
-            <h2 class="text-2xl font-medieval text-amber-400 mb-6">{{ loadingMessage() }}</h2>
-            <div class="w-full bg-slate-700 rounded-full h-4 mb-4 border-2 border-slate-600 shadow-inner">
-                <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300 ease-linear" [style.width]="loadingProgress() + '%'"></div>
+          <div class="loading-container">
+            <h2 class="loading-message">{{ loadingMessage() }}</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" [style.width]="loadingProgress() + '%'"></div>
             </div>
-            <p class="text-amber-300 font-bold text-lg">{{ loadingProgress() }}%</p>
+            <p class="progress-text">{{ loadingProgress() }}%</p>
           </div>
         } @else {
-          <form (submit)="generateCharacter()" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form (submit)="generateCharacter()" class="character-form">
+            <div class="form-grid">
               <!-- Name -->
-              <div>
-                <label for="charName" class="block text-sm font-medium text-slate-300 mb-1">Character Name</label>
-                <input type="text" id="charName" [ngModel]="characterName()" (ngModelChange)="characterName.set($event)" name="charName" class="w-full bg-stone-800 border border-stone-700 rounded-md shadow-sm px-4 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 placeholder-stone-500 text-slate-200">
+              <div class="form-group">
+                <label for="charName">Character Name</label>
+                <input type="text" id="charName" [ngModel]="characterName()" (ngModelChange)="characterName.set($event)" name="charName" class="form-input">
               </div>
               
               <!-- Race -->
-              <div>
-                <label for="charRace" class="block text-sm font-medium text-slate-300 mb-1">Race</label>
-                <select id="charRace" [ngModel]="characterRace()" (ngModelChange)="characterRace.set($event)" name="charRace" class="w-full bg-stone-800 border border-stone-700 rounded-md shadow-sm px-4 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-slate-200">
+              <div class="form-group">
+                <label for="charRace">Race</label>
+                <select id="charRace" [ngModel]="characterRace()" (ngModelChange)="characterRace.set($event)" name="charRace" class="form-select">
                   @for (race of races; track race) {
                     <option [value]="race">{{ race }}</option>
                   }
@@ -41,9 +41,9 @@
               </div>
 
               <!-- Class -->
-              <div>
-                <label for="charClass" class="block text-sm font-medium text-slate-300 mb-1">Class</label>
-                <select id="charClass" [ngModel]="characterClass()" (ngModelChange)="characterClass.set($event)" name="charClass" class="w-full bg-stone-800 border border-stone-700 rounded-md shadow-sm px-4 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-slate-200">
+              <div class="form-group">
+                <label for="charClass">Class</label>
+                <select id="charClass" [ngModel]="characterClass()" (ngModelChange)="characterClass.set($event)" name="charClass" class="form-select">
                   @for (cls of classes; track cls) {
                     <option [value]="cls">{{ cls }}</option>
                   }
@@ -51,30 +51,30 @@
               </div>
 
               <!-- Special Elements -->
-              <div class="md:col-span-2">
-                 <label for="specialElements" class="block text-sm font-medium text-slate-300 mb-1">Special Elements & Appearance</label>
-                 <textarea id="specialElements" [ngModel]="specialElements()" (ngModelChange)="specialElements.set($event)" name="specialElements" rows="3" class="w-full bg-stone-800 border border-stone-700 rounded-md shadow-sm px-4 py-2 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 placeholder-stone-500 text-slate-200" placeholder="e.g., flowing white hair, a scar over the left eye, holding a glowing orb"></textarea>
+              <div class="form-group full-span">
+                 <label for="specialElements">Special Elements & Appearance</label>
+                 <textarea id="specialElements" [ngModel]="specialElements()" (ngModelChange)="specialElements.set($event)" name="specialElements" rows="3" class="form-textarea" placeholder="e.g., flowing white hair, a scar over the left eye, holding a glowing orb"></textarea>
               </div>
 
                <!-- Traits Checkbox -->
-              <div class="md:col-span-2 flex items-center gap-3 -mt-2">
-                  <input type="checkbox" id="addTraits" [checked]="includeRandomTraits()" (change)="includeRandomTraits.set($any($event.target).checked)" name="addTraits" class="h-5 w-5 bg-stone-800 border-stone-700 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                  <label for="addTraits" class="text-sm font-medium text-slate-300 cursor-pointer">Add Random Personality Traits</label>
+              <div class="checkbox-group">
+                  <input type="checkbox" id="addTraits" [checked]="includeRandomTraits()" (change)="includeRandomTraits.set($any($event.target).checked)" name="addTraits" class="form-checkbox">
+                  <label for="addTraits">Add Random Personality Traits</label>
               </div>
             </div>
 
             @if(error()) {
-              <div class="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-md text-sm">
+              <div class="error-box">
                 <p><strong>Error:</strong> {{ error() }}</p>
               </div>
             }
 
-            <div class="pt-2 flex items-stretch gap-4">
-              <button type="submit" [disabled]="!characterName().trim() || isLoading()" class="flex-grow font-medieval text-2xl bg-amber-600 text-slate-900 hover:bg-amber-500 disabled:bg-stone-600 disabled:text-stone-400 disabled:cursor-not-allowed font-bold py-3 px-4 rounded-lg shadow-lg transition-transform duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50">
+            <div class="button-group">
+              <button type="submit" [disabled]="!characterName().trim() || isLoading()" class="btn btn-primary font-medieval">
                 Forge Character
               </button>
-              <button type="button" (click)="randomizeCharacter()" [disabled]="isLoading()" title="Randomize Character" class="flex-shrink-0 p-3 bg-stone-700 text-amber-400 hover:bg-stone-600 disabled:bg-stone-600 disabled:text-stone-400 disabled:cursor-not-allowed rounded-lg shadow-lg transition-transform duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-stone-500 focus:ring-opacity-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 512 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM160 160a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm192 0a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm-96 96a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm-96 96a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm192 0a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"/></svg>
+              <button type="button" (click)="randomizeCharacter()" [disabled]="isLoading()" title="Randomize Character" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM160 160a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm192 0a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm-96 96a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm-96 96a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm192 0a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"/></svg>
               </button>
             </div>
           </form>
@@ -82,28 +82,28 @@
       </div>
     } @else {
       <!-- Character Card -->
-      <div class="bg-gradient-to-br from-yellow-900 to-stone-950 p-1.5 rounded-xl shadow-2xl animate-fade-in border-2 border-black/50">
-      <div class="bg-gradient-to-br from-stone-800 to-stone-900 p-1 rounded-lg">
-      <div class="bg-[url('https://www.transparenttextures.com/patterns/old-paper.png')] bg-amber-50/90 text-stone-800 p-4 sm:p-6 rounded-md border-2 border-yellow-900/50">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="character-card-container">
+      <div class="card-frame-outer">
+      <div class="card-content">
+        <div class="card-grid">
           <!-- Image with new intricate frame -->
-          <div class="bg-gradient-to-b from-yellow-950 via-stone-800 to-black p-2 rounded-xl shadow-lg border-2 border-black/50">
-            <div class="bg-gradient-to-t from-amber-800 to-amber-900 p-1 rounded-lg shadow-inner">
-              <div class="bg-black p-0.5 rounded-md">
-                 <img [src]="generatedImage()" alt="Generated character portrait" class="rounded-sm w-full h-auto object-cover aspect-square">
+          <div class="portrait-frame-outer">
+            <div class="portrait-frame-middle">
+              <div class="portrait-frame-inner">
+                 <img [src]="generatedImage()" alt="Generated character portrait" class="portrait-image">
               </div>
             </div>
           </div>
           
           <!-- Details & Stats -->
-          <div class="flex flex-col justify-center">
-            <h2 class="font-medieval text-4xl text-stone-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.5)] text-center lg:text-left">{{ characterName() }}</h2>
-            <p class="font-semibold text-stone-600 text-xl text-center lg:text-left mb-6">{{ characterRace() }} {{ characterClass() }}</p>
+          <div class="details-stats">
+            <h2 class="character-name font-medieval">{{ characterName() }}</h2>
+            <p class="character-class">{{ characterRace() }} {{ characterClass() }}</p>
 
             @if(characterTraits() && characterTraits()!.length > 0) {
-              <div class="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
+              <div class="traits-container">
                   @for(trait of characterTraits(); track trait) {
-                      <span class="bg-amber-800/80 border border-amber-900/50 text-amber-50 text-sm font-semibold px-3 py-1 rounded-md shadow-md">
+                      <span class="trait-badge">
                           {{ trait }}
                       </span>
                   }
@@ -111,35 +111,35 @@
             }
 
             @if(characterStats(); as stats) {
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center bg-stone-800/80 p-4 rounded-md border-t-2 border-stone-900/50 shadow-inner">
+              <div class="stats-grid">
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">STR</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.strength }}</span>
+                  <span class="stat-label">STR</span>
+                  <span class="stat-value">{{ stats.strength }}</span>
                 </div>
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">DEX</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.dexterity }}</span>
+                  <span class="stat-label">DEX</span>
+                  <span class="stat-value">{{ stats.dexterity }}</span>
                 </div>
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">CON</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.constitution }}</span>
+                  <span class="stat-label">CON</span>
+                  <span class="stat-value">{{ stats.constitution }}</span>
                 </div>
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">INT</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.intelligence }}</span>
+                  <span class="stat-label">INT</span>
+                  <span class="stat-value">{{ stats.intelligence }}</span>
                 </div>
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">WIS</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.wisdom }}</span>
+                  <span class="stat-label">WIS</span>
+                  <span class="stat-value">{{ stats.wisdom }}</span>
                 </div>
                 <div class="stat-item">
-                  <span class="font-bold text-lg text-stone-300">CHA</span>
-                  <span class="text-2xl font-bold text-amber-300">{{ stats.charisma }}</span>
+                  <span class="stat-label">CHA</span>
+                  <span class="stat-value">{{ stats.charisma }}</span>
                 </div>
               </div>
             }
 
-             <button (click)="resetForm()" class="mt-8 w-full font-medieval text-xl bg-gradient-to-br from-yellow-800 to-yellow-950 text-amber-50 hover:from-yellow-700 font-bold py-3 px-4 rounded-lg shadow-lg border border-black/30 transition-transform duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50">
+             <button (click)="resetForm()" class="btn btn-reroll font-medieval">
                 Forge Another
               </button>
           </div>
@@ -150,19 +150,3 @@
     }
   </div>
 </main>
-<style>
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-  }
-  @keyframes fade-in {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out forwards;
-  }
-</style>
